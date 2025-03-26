@@ -1,0 +1,33 @@
+@startuml
+
+actor "User" as user
+node "Reservations\nHTTP 3000" as reservations
+node "Auth\nHTTP 3001\nTCP 3002" as auth
+database "MongoDB" as db
+node "Payments\nTCP 3003" as payments
+node "Notifications\nTCP 3004" as notifications
+usecase "Gmail" as email
+
+control "JWT" as user_auth
+note left of user_auth
+Passport Session Authentication
+endnote
+
+control "JWT" as login_auth
+note left of login_auth
+MessagePattern
+authenticate
+endnote
+
+user --> user_auth
+user_auth --> reservations : POST /reservations
+user <--> auth : POST /login
+auth <-- login_auth
+login_auth --> reservations
+auth <--> db : Users
+reservations <--> db : Reservations
+reservations --> payments : MessagePattern\ncreate_charge
+payments --> notifications : MessagePattern\nnotify_email
+notifications --> email
+
+@enduml
