@@ -2,32 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { ReservationsRepository } from './reservations.repository';
+import { BaseService } from '@app/common/crud';
+import { ReservationDocument } from './models/reservation.schema';
 
 @Injectable()
-export class ReservationsService {
-  constructor(
-    private readonly reservationsRepository: ReservationsRepository,
-  ) {}
-
-  create(createReservationDto: CreateReservationDto) {
-    return this.reservationsRepository.create(createReservationDto);
-  }
-
-  findAll() {
-    return this.reservationsRepository.find();
-  }
-
-  findOne(id: string) {
-    return this.reservationsRepository.findById(id);
-  }
-
-  update(id: string, updateReservationDto: UpdateReservationDto) {
-    return this.reservationsRepository.findByIdAndUpdate(id, {
-      $set: updateReservationDto,
-    });
-  }
-
-  remove(id: string) {
-    return this.reservationsRepository.findByIdAndDelete(id);
+export class ReservationsService extends BaseService<
+  ReservationDocument,
+  CreateReservationDto,
+  UpdateReservationDto
+> {
+  constructor(private readonly reservationsRepository: ReservationsRepository) {
+    super(reservationsRepository);
   }
 }
