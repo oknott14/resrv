@@ -15,7 +15,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     return createdDocument.toObject<TDocument>({ flattenMaps: true });
   }
 
-  async find(query: FilterQuery<TDocument>): Promise<TDocument[]> {
+  async find(query: FilterQuery<TDocument> = {}): Promise<TDocument[]> {
     return this.model.find(query).lean<TDocument[]>(true);
   }
 
@@ -31,7 +31,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     return document;
   }
 
-  async findOne(query: FilterQuery<TDocument>): Promise<TDocument> {
+  async findOne(query: FilterQuery<TDocument> = {}): Promise<TDocument> {
     return this.model
       .findOne(query)
       .lean<TDocument>(true)
@@ -55,18 +55,18 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
       .then((doc) => this.ensureDocument(doc, query));
   }
 
-  async findById(_id: Types.ObjectId): Promise<TDocument> {
+  async findById(_id: string | Types.ObjectId): Promise<TDocument> {
     return this.findOne({ _id });
   }
 
   async findByIdAndUpdate(
-    _id: Types.ObjectId,
+    _id: string | Types.ObjectId,
     updates: UpdateQuery<TDocument>,
   ): Promise<TDocument> {
     return this.findOneAndUpdate({ _id }, updates);
   }
 
-  async fundByIdAndDelete(_id: Types.ObjectId): Promise<TDocument> {
+  async findByIdAndDelete(_id: string | Types.ObjectId): Promise<TDocument> {
     return this.findOneAndDelete({ _id });
   }
 }
