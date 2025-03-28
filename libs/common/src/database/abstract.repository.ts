@@ -15,7 +15,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     return createdDocument.toObject<TDocument>({ flattenMaps: true });
   }
 
-  async find(query: FilterQuery<TDocument> = {}): Promise<TDocument[]> {
+  find(query: FilterQuery<TDocument> = {}): Promise<TDocument[]> {
     return this.model.find(query).lean<TDocument[]>(true);
   }
 
@@ -32,27 +32,26 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   }
 
   async findOne(query: FilterQuery<TDocument> = {}): Promise<TDocument> {
-    return this.model
-      .findOne(query)
-      .lean<TDocument>(true)
-      .then((doc) => this.ensureDocument(doc, query));
+    const document = await this.model.findOne(query).lean<TDocument>(true);
+
+    return this.ensureDocument(document, query);
   }
 
   async findOneAndUpdate(
     query: FilterQuery<TDocument>,
     updates: UpdateQuery<TDocument>,
   ): Promise<TDocument> {
-    return this.model
+    const document = await this.model
       .findOneAndUpdate(query, updates, { new: true })
-      .lean<TDocument>(true)
-      .then((doc) => this.ensureDocument(doc, query));
+      .lean<TDocument>(true);
+    return this.ensureDocument(document, query);
   }
 
   async findOneAndDelete(query: FilterQuery<TDocument>): Promise<TDocument> {
-    return await this.model
+    const document = await this.model
       .findOneAndDelete(query)
-      .lean<TDocument>(true)
-      .then((doc) => this.ensureDocument(doc, query));
+      .lean<TDocument>(true);
+    return this.ensureDocument(document, query);
   }
 
   async findById(_id: string | Types.ObjectId): Promise<TDocument> {

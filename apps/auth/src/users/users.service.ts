@@ -28,7 +28,7 @@ export class UsersService extends BaseService<
 
   private async validateUserEmail(email: string) {
     try {
-      this.usersRepository.findOne({ email });
+      await this.usersRepository.findOne({ email });
 
       throw new UnprocessableEntityException(
         `A user with the email ${email} already exists`,
