@@ -8,7 +8,7 @@ COPY pnpm-lock.yaml ./
 RUN npm install -g pnpm@latest-10
 RUN pnpm install
 COPY . .
-RUN pnpm run build
+RUN pnpm run build auth
 
 FROM node:alpine AS production
 

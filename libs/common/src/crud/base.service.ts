@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { AbstractRepository } from '../database/abstract.repository';
 import { AbstractDocument } from '../database/abstract.schema';
 
@@ -9,25 +10,25 @@ export abstract class BaseService<
 > {
   constructor(private readonly repository: AbstractRepository<TDocument>) {}
 
-  create(createReservationDto: CreateDocumentDto) {
-    return this.repository.create(createReservationDto);
+  create(createDocumentDto: CreateDocumentDto) {
+    return this.repository.create(createDocumentDto);
   }
 
   findAll() {
     return this.repository.find();
   }
 
-  findOne(id: string) {
+  findById(id: string) {
     return this.repository.findById(id);
   }
 
-  update(id: string, updateReservationDto: UpdateDocumentDto) {
+  update(id: string | Types.ObjectId, updateDocumentDto: UpdateDocumentDto) {
     return this.repository.findByIdAndUpdate(id, {
-      $set: updateReservationDto,
+      $set: updateDocumentDto,
     });
   }
 
-  remove(id: string) {
+  remove(id: string | Types.ObjectId) {
     return this.repository.findByIdAndDelete(id);
   }
 }

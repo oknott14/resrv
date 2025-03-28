@@ -30,8 +30,8 @@ export class BaseController<
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.service.findOne(id);
+  findById(@Param('id') id: string) {
+    return this.service.findById(id);
   }
 
   @Patch(':id')

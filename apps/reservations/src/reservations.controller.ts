@@ -1,9 +1,17 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Patch,
+  Param,
+} from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { ReservationDocument } from './models/reservation.schema';
 import { BaseController } from '@app/common/crud';
+import { JwtAuthGuard } from '@app/common';
 
 @Controller('reservations')
 export class ReservationsController extends BaseController<
@@ -15,6 +23,7 @@ export class ReservationsController extends BaseController<
     super(reservationsService);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createReservationDto: CreateReservationDto) {
     return this.reservationsService.create({
@@ -22,5 +31,14 @@ export class ReservationsController extends BaseController<
       userId: '1234567890',
       timestamp: new Date(),
     });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateDocumentDto: UpdateReservationDto,
+  ): Promise<ReservationDocument> {
+    return super.update(id, updateDocumentDto);
   }
 }
