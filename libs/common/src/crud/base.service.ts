@@ -3,7 +3,7 @@ import { AbstractRepository } from '../database/abstract.repository';
 import { AbstractDocument } from '../database/abstract.schema';
 
 export abstract class BaseService<
-  TDocument extends AbstractDocument = AbstractDocument,
+  TDocument extends AbstractDocument,
   CreateDocumentDto extends Omit<TDocument, '_id'> = Omit<TDocument, '_id'>,
   UpdateDocumentDto extends
     Partial<CreateDocumentDto> = Partial<CreateDocumentDto>,
@@ -11,7 +11,7 @@ export abstract class BaseService<
   constructor(private readonly repository: AbstractRepository<TDocument>) {}
 
   create(createDocumentDto: CreateDocumentDto) {
-    return this.repository.create(createDocumentDto);
+    return this.repository.create(createDocumentDto as Omit<TDocument, '_id'>);
   }
 
   findAll() {

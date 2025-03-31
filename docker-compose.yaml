@@ -25,5 +25,27 @@ services:
       - '3001:3001'
     volumes:
       - .:/usr/src/app
+  payments:
+    container_name: payments
+    build:
+      context: .
+      dockerfile: ./apps/payments/Dockerfile
+      target: development
+    command: pnpm run start:dev payments
+    env_file:
+      - ./apps/payments/.env
+    volumes:
+      - .:/usr/src/app
+  notifications:
+    container_name: notifications
+    build:
+      context: .
+      dockerfile: ./apps/notifications/Dockerfile
+      target: development
+    command: pnpm run start:dev notifications
+    env_file:
+      - ./apps/notifications/.env
+    volumes:
+      - .:/usr/src/app
   mongo:
     image: mongo
