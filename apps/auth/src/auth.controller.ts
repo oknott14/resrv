@@ -6,6 +6,7 @@ import { UserDocument } from './users/models/users.schema';
 import { Response } from 'express';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { UserDto } from '@app/common';
 
 @Controller('auth')
 export class AuthController {
@@ -23,7 +24,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @MessagePattern('authenticate')
-  async authenticate(@Payload() data: any) {
-    console.log(data);
+  async authenticate(@Payload() data: { user: UserDto }) {
+    return data.user;
   }
 }
