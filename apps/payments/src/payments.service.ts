@@ -49,7 +49,10 @@ export class PaymentsService {
       automatic_payment_methods: { enabled: true, allow_redirects: 'never' },
     });
 
-    this.notificationService.emit('notify_email', { email });
+    this.notificationService.emit('notify_email', {
+      email,
+      text: `Your payment of $${amount} has completed successfully.`,
+    });
     return paymentIntent;
   }
 }

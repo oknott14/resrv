@@ -7,7 +7,7 @@ import { NotifyEmailDto } from './dto/notify-email.dto';
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
 
-  @EventPattern('notify-email')
+  @EventPattern('notify_email')
   async notifyEmail(@Payload() data: NotifyEmailDto) {
     this.notificationsService.notifyEmail(data);
   }
