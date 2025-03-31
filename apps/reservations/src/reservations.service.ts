@@ -6,7 +6,7 @@ import { ReservationDocument } from './models/reservation.schema';
 import { PAYMENTS_SERVICE } from '@app/common/constants/services';
 import { ClientProxy } from '@nestjs/microservices';
 import { Types } from 'mongoose';
-import { toObjectId } from '@app/common';
+import { toObjectId, UserDto } from '@app/common';
 import { map, Observable } from 'rxjs';
 
 @Injectable()
@@ -18,10 +18,10 @@ export class ReservationsService {
 
   async create(
     createDocumentDto: CreateReservationDto,
-    userId: string | Types.ObjectId,
+    { email, _id: userId }: UserDto,
   ) {
     return this.paymentsService
-      .send('create_charge', createDocumentDto.charge)
+      .send('create_charge', { ...createDocumentDto.charge, email })
       .pipe(
         map((res) => {
           return this.reservationsRepository.create({
