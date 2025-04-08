@@ -4,10 +4,17 @@ WORKDIR /usr/src/app
 
 COPY package.json ./
 COPY pnpm-lock.yaml ./
+COPY tsconfig.json tsconfig.json
 
 RUN npm install -g pnpm@latest-10
+
 RUN pnpm install
-COPY . .
+
+COPY apps/notifications apps/notifications
+COPY libs libs
+
+RUN cd apps/notifications && pnpm install
+
 RUN pnpm run build notifications
 
 FROM node:alpine AS production
@@ -20,9 +27,10 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY pnpm-lock.yaml ./
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm@latest-10
+
 RUN pnpm install --prod
-RUN pnpm i -g @nestjs/cli
+
 COPY --from=development /usr/src/app/dist ./dist
 
 CMD ["node", "dist/apps/notifications/main"]

@@ -6,7 +6,7 @@ import {
 import { UsersRepository } from './users.repository';
 import { CreateUserDto } from './dto/create-user.dto';
 import { BaseService } from '@app/common';
-import { UserDocument } from './models/users.schema';
+import { UserDocument } from '@app/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcryptjs';
 

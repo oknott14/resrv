@@ -2,12 +2,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { ReservationsRepository } from './reservations.repository';
-import { ReservationDocument } from './models/reservation.schema';
 import { PAYMENTS_SERVICE } from '@app/common/constants/services';
 import { ClientProxy } from '@nestjs/microservices';
 import { Types } from 'mongoose';
 import { toObjectId, UserDto } from '@app/common';
-import { map, Observable } from 'rxjs';
+import { map } from 'rxjs';
 
 @Injectable()
 export class ReservationsService {
