@@ -1,4 +1,6 @@
 # PRODUCTION BUILD FOR ALL APPS
+build:
+  logging: NONE
 steps:
   # RESERVATIONS
   - name: 'gcr.io/cloud-builders/docker'
