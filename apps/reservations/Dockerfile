@@ -4,10 +4,14 @@ WORKDIR /usr/src/app
 
 COPY package.json ./
 COPY pnpm-lock.yaml ./
-
+COPY tsconfig.json tsconfig.json
 RUN npm install -g pnpm@latest-10
+
 RUN pnpm install
-COPY . .
+
+COPY apps/reservations apps/reservations
+COPY libs libs
+
 RUN pnpm run build reservations
 
 FROM node:alpine AS production
@@ -20,9 +24,10 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY pnpm-lock.yaml ./
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm@latest-10
+
 RUN pnpm install --prod
-RUN pnpm i -g @nestjs/cli
+
 COPY --from=development /usr/src/app/dist ./dist
 
 CMD ["node", "dist/apps/reservations/main"]
