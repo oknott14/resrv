@@ -9,6 +9,7 @@ steps:
         'us-east4-docker.pkg.dev/resrv-455422/reservations/production',
         '-f',
         'apps/reservations/Dockerfile',
+        '.',
       ]
   - name: 'gcr.io/cloud-builders/docker'
     args:
@@ -22,6 +23,7 @@ steps:
         'us-east4-docker.pkg.dev/resrv-455422/auth/production',
         '-f',
         'apps/auth/Dockerfile',
+        '.',
       ]
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-east4-docker.pkg.dev/resrv-455422/auth/production']
@@ -34,6 +36,7 @@ steps:
         'us-east4-docker.pkg.dev/resrv-455422/payments/production',
         '-f',
         'apps/payments/Dockerfile',
+        '.',
       ]
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-east4-docker.pkg.dev/resrv-455422/payments/production']
@@ -46,6 +49,7 @@ steps:
         'us-east4-docker.pkg.dev/resrv-455422/notifications/production',
         '-f',
         'apps/notifications/Dockerfile',
+        '.',
       ]
   - name: 'gcr.io/cloud-builders/docker'
     args:
