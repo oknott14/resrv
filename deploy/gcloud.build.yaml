@@ -51,4 +51,5 @@ steps:
     args:
       ['push', 'us-east4-docker.pkg.dev/resrv-455422/notifications/production']
 options:
+  logs_bucket: REGIONAL_USER_OWNED_BUCKET
   logging: LEGACY
