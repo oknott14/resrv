@@ -5,7 +5,9 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY pnpm-lock.yaml ./
 COPY tsconfig.json tsconfig.json
-RUN npm install -g pnpm@latest-10
+COPY nest-cli.json nest-cli.json
+
+RUN npm install -g pnpm
 
 RUN pnpm install
 
@@ -24,7 +26,7 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY pnpm-lock.yaml ./
 
-RUN npm install -g pnpm@latest-10
+RUN npm install -g pnpm
 
 RUN pnpm install --prod
 
