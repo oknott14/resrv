@@ -30,6 +30,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
         JWT_EXPIRATION: Joi.string().required(),
         HTTP_PORT: Joi.number().required(),
         TCP_PORT: Joi.number().required(),
+        HOST: Joi.string().optional().default('0.0.0.0'),
       }),
     }),
   ],

@@ -17,3 +17,19 @@ spec:
       containers:
         - image: us-east4-docker.pkg.dev/resrv-455422/payments/production
           name: payments
+          env:
+            - name: PORT
+              value: '3003'
+            - name: NOTIFICATIONS_PORT
+              value: '3004'
+            - name: NOTIFICATIONS_HOST
+              value: 'notifications'
+            - name: ENVIRONMENT
+              value: 'development'
+            - name: STRIPE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stripe
+                  key: privateKey
+          ports:
+            - containerPort: 3003

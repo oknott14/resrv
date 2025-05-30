@@ -13,7 +13,7 @@ import { NOTIFICATIONS_SERVICE } from '@app/common/constants/services';
       isGlobal: true,
       validationSchema: Joi.object({
         DB_URI: Joi.string().required(),
-        HOST: Joi.string().required(),
+        HOST: Joi.string().optional().default('0.0.0.0'),
         PORT: Joi.number().required(),
         STRIPE_SECRET_KEY: Joi.string().required(),
         ENVIRONMENT: Joi.string().required().allow('development', 'production'),

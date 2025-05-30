@@ -18,8 +18,8 @@ spec:
         - image: us-east4-docker.pkg.dev/resrv-455422/notifications/production
           name: notifications
           env:
-            - name: port
-              value: '3000'
+            - name: PORT
+              value: '3004'
             - name: SMTP_USER
               value: oknott2000@gmail.com
             - name: GOOGLE_OAUTH_CLIENT_ID
@@ -35,4 +35,4 @@ spec:
                   name: google
                   key: refreshToken
           ports:
-            - containerPort: 3000
+            - containerPort: 3004
