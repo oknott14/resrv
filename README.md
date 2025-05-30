@@ -1,99 +1,103 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# RESRV
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+RESRV is a simple reservations API that was built to investigate distributed systems and microservices design patterns.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tech Stack
 
-## Description
+This project was written in TypeScript on NodeJs using the NestJS framework, containerized using Docker with Kubernetes, and deployed to Google Cloud.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Languages / Frameworks
 
-## Project setup
+- TypeScript
+- NodeJs
+- NestJs
+- Passport
+- Bcrypt
+- Stripe
 
-```bash
-$ pnpm install
+### Database
+
+- MongoDB / MongoDB Atlas
+
+### CI/CD / Cloud
+
+- Docker
+- Kubernetes
+- Google Cloud / Google Cloud Build
+
+## Getting Started
+
+Follow these steps to download and run the project locally.
+
+### Pre-requisites
+
+1. [Install Docker](https://docs.docker.com/engine/install/)
+2. [Create a Stripe Account](https://docs.stripe.com/)
+3. [Setup Google OAuth2 for Email](https://developers.google.com/identity/protocols/oauth2)\
+4. [Install pnpm](https://pnpm.io/installation)
+
+### Setting Up the Repository
+
+1. Clone the repository into a local folder.
+
+```
+git clone https://github.com/oknott14/resrv.git
 ```
 
-## Compile and run the project
+2. Cd into the _resrv_ folder: `cd ./resrv`
+3. Install the app dependencies: `pnpm i -r`
+4. Create _.env_ files for each of the 4 microservices.
 
-```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+```BASH
+touch ./apps/auth/.env
+touch ./apps/notifications/.env
+touch ./apps/payments/.env
+touch ./apps/reservations/.env
 ```
 
-## Run tests
+5. Populate each env file from the template in the microservice directory.
 
-```bash
-# unit tests
-$ pnpm run test
+---
 
-# e2e tests
-$ pnpm run test:e2e
+To add values to each env, use the _{microservice}.env.template_ files in the environment folder. Either copy the values to their respective templates or run the following commands:
 
-# test coverage
-$ pnpm run test:cov
+```BASH
+cat ./apps/auth/.ent.template > ./apps/auth/.env
+cat ./apps/notifications/.env.template > ./apps/notifications/.env
+cat ./apps/payments/.env.template > ./apps/payments/.env
+cat ./apps/reservations/.env.template > ./apps/reservations/.env
 ```
 
-## Deployment
+The templates will add in all required non-sensitive env variables. Each .env file will need to have sensitive values, like the database uri or stripe secret key entered manually.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+---
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+6. Run `docker compose up` to start all 4 microservices.
 
-```bash
-$ pnpm install -g mau
-$ mau deploy
-```
+### Using the API
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Using Postman, Curl, or a web browser, the API endpoints can be reached at http://localhost:3000 and http://localhost:3001.
 
-## Resources
+## Design
 
-Check out a few resources that may come in handy when working with NestJS:
+RESRV has 4 microservices that communicate with eachother: Auth, Reservations, Notifications, and Payments. Each microservice is a standalone NestJS module following the Controller, Service, Repository Design Pattern.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+<img src="./design//architecture/system.architecture.png"/>
 
-## Support
+### Authentication
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+The Auth microservice handles user login and authentication for the rest of the app. User's login by making a POST request to the http://localhost:3001/login endpoint with their user and password. If the password matches the encrypted stored password, then the user is authenticated and a session token is issued.
 
-## Stay in touch
+Every other route in the application uses an authentication guard ensuring that the request has a valid session token. If the token is invalid, the request is rejected with a 403 error. This guard requests the authentication microservice using the _Message Pattern_ and validates the token.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Reservations
 
-## License
+Reservations are created by making a POST request to http://localhost:3000/reservations. Before the reservation is created in the database, the reservations microservice requests the payment microservice using the _Message Pattern_ to validate the payment details provided by the user and charge their card. If the payment is valid, the reservation is stored in the database. Otherwise, the request is rejected with a 401 error.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### Payments
+
+The payments microservice is responsble for using Stripe to validate payments and charge users for their reservations. Payments will pass the card information sent to it by _reservations_ to Stripe to validate and charge the card. If the card is valid, payments will request the _Notifications_ microservice to asynchronously send the user a payment / booking confirmation email using the _Event Pattern_.
+
+### Notifications
+
+The notifications microservice formats the reservation and confirmed payment data into an email template and sends it to the user via SMTP. The SMTP transport uses Google OAuth2 to autorize the app to send mail via your GMail account.
