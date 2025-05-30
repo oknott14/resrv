@@ -7,11 +7,22 @@ function set_access_key {
   kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "$1"}]}'
 }
 
+function create_deployment {
+  echo "Deploying $1"
+  if kubectl get deployment $1; then
+    kubectl rollout restart deployment $1
+  elif ls ./k8s/resrv/templates/$1/deployment.yaml; then
+    echo "Using existing deployment template for $1"
+  else
+    # docker pull us-east4-docker.pkg.dev/resrv-455422/$1/production
+    mkdir ./k8s/resrv/templates/$1
+    kubectl create deployment $1 --image=us-east4-docker.pkg.dev/resrv-455422/$1/production --dry-run=client -o yaml > ./k8s/resrv/templates/$1/deployment.yaml
+    sed -i "s/name: production/name: $1/g" ./k8s/resrv/templates/$1/deployment.yaml
+  fi
+}
+
 # Uninstall Current Project
-if helm get manifest resrv; then
-  echo "Uninstalling Current Project"
-  helm uninstall resrv
-fi
+
 
 # Setup JSON Key for Access
 if kubectl get secret | grep -q "gcr-json-key"; then
@@ -21,12 +32,16 @@ else
 fi
 
 # Create Reservations Deployment from Image
-if kubectl get deployment reservations; then
-  kubectl rollout restart deployment reservations
-else
-  docker pull us-east4-docker.pkg.dev/resrv-455422/reservations/production
-  kubectl create deployment reservations --image=us-east4-docker.pkg.dev/resrv-455422/reservations/production --dry-run=client -o yaml > ./k8s/resrv/templates/reservations/deployment.yaml
-fi
+create_deployment reservations
+create_deployment auth
+create_deployment notifications
+create_deployment payments
 
-# Install Deployments
-helm install resrv ./k8s/resrv
+# Install or Upgrade Helm
+if helm get manifest resrv; then
+  echo "Upgrading RESRV"
+  helm upgrade resrv ./k8s/resrv
+else
+  echo "Installing RESRV"
+  helm install resrv ./k8s/resrv
+fi

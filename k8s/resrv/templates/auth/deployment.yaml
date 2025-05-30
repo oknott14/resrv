@@ -2,21 +2,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: reservations
-  name: reservations
+    app: auth
+  name: auth
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: reservations
+      app: auth
   template:
     metadata:
       labels:
-        app: reservations
+        app: auth
     spec:
       containers:
-        - image: us-east4-docker.pkg.dev/resrv-455422/reservations/production
-          name: reservations
+        - image: us-east4-docker.pkg.dev/resrv-455422/notifications/production
+          name: auth
           env:
             - name: MONGODB_URI
               valueFrom:
